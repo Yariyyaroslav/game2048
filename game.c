@@ -20,16 +20,20 @@ int **createBoard(int rows, int columns) {
   return board;
 }
 void freeBoard(int **board, int rows) {
-  if (!board)
-    return;
+  if (!board){
+     return;
+  }
+   
   for (int i = 0; i < rows; i++) {
     free(board[i]);
   }
   free(board);
 }
 void clearBoard(int **board, int rows, int columns) {
-  if (!board)
+  if (!board){
     return;
+  }
+    
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < columns; j++) {
       board[i][j] = 0;
@@ -304,7 +308,9 @@ int findLargestTile(int **board, int rows, int columns) {
     return maxTile;
 }
 int canMove(int **board, int rows, int columns) {
-    if (countEmptyCells(board, rows, columns) > 0) return 0;
+    if (countEmptyCells(board, rows, columns) > 0) {
+        return 0;
+    }
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
