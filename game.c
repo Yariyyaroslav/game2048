@@ -67,7 +67,7 @@ int moveLeft(int **board, int rows, int columns, int *score) {
   int changed = 0;
   int *temp = malloc(columns * sizeof(int));
   if (!temp) {
-    return 0;
+    return 1;
   }
 
   for (int i = 0; i < rows; i++) {
@@ -114,7 +114,7 @@ int moveRight(int **board, int rows, int columns, int *score) {
   int changed = 0;
   int *temp = malloc(columns * sizeof(int));
   if (!temp) {
-    return 0;
+    return 1;
   }
 
   for (int i = 0; i < rows; i++) {
@@ -157,4 +157,112 @@ int moveRight(int **board, int rows, int columns, int *score) {
 
   free(temp);
   return changed;
+}
+int moveUp(int **board, int rows, int columns, int *score) {
+    int changed = 0;
+    int *temp = malloc(rows * sizeof(int));
+    if (!temp) {
+        return 1;
+    }
+
+    for (int j = 0; j < columns; j++) {
+        int pos = 0;
+        for (int i = 0; i < rows; i++){
+             temp[i] = 0;
+        }
+
+        for (int i = 0; i < rows; i++) {
+            if (board[i][j] != 0) {
+                temp[pos] = board[i][j];
+                pos++;
+            }
+        }
+        for (int i = 0; i < pos - 1; i++) {
+            if (temp[i] != 0 && temp[i] == temp[i + 1]) {
+                temp[i] *= 2;
+                *score += temp[i];
+                temp[i + 1] = 0;
+                i++;
+            }
+        }
+        pos = 0;
+        for (int i = 0; i < rows; i++) {
+            int val = 0;
+            while (pos < rows && temp[pos] == 0) {
+                pos++;
+            }
+            if (pos < rows){
+                 val = temp[pos];
+                 pos++;
+            }
+
+            if (board[i][j] != val) {
+                changed = 1;
+                board[i][j] = val;
+            }
+        }
+    }
+
+    free(temp);
+    return changed;
+}
+int moveDown(int **board, int rows, int columns, int *score) {
+  int changed = 0;
+  int *temp = malloc(rows * sizeof(int));
+  if (!temp) {
+    return 1;
+  }
+
+  for (int j = 0; j < columns; j++) {
+    for (int i = 0; i < rows; i++) {
+      temp[i] = 0;
+    }
+
+    int pos = rows - 1;
+    for (int i = rows - 1; i >= 0; i--) {
+      if (board[i][j] != 0) {
+        temp[pos] = board[i][j];
+        pos--;
+      }
+    }
+
+    for (int i = rows - 1; i > pos + 1; i--) {
+      if (temp[i] != 0 && temp[i] == temp[i - 1]) {
+        temp[i] *= 2;
+        *score += temp[i];
+        temp[i - 1] = 0;
+        i--;
+      }
+    }
+
+    pos = rows - 1;
+    for (int i = rows - 1; i >= 0; i--) {
+      int val = 0;
+      while (pos >= 0 && temp[pos] == 0) {
+        pos--;
+      }
+      if (pos >= 0) {
+        val = temp[pos];
+        pos--;
+      }
+      if (board[i][j] != val) {
+        changed = 1;
+        board[i][j] = val;
+      }
+    }
+  }
+
+  free(temp);
+  return changed;
+}
+int countEmptyCells(int **board, int rows, int columns) {
+    int count = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < columns; j++) {
+            if (board[i][j] == 0) {
+                count++;
+            }
+        }
+    }
+    return count;
 }
